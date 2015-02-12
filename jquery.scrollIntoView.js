@@ -10,17 +10,33 @@
  * @date 8 Jan 2013
  * @author Arwid Bancewicz http://arwid.ca
  * @version 0.3
+ *
+ * NOTE: this is the fork from: https://github.com/kbaltrinic/jQuery.scrollIntoView
+ *
+ * UPDATED by Alex Kinnee:
+ * - Added AMD support
  */
- (function($) {
+(function(factory) {
+    if (typeof define === 'function' && define.amd) {
+        // AMD
+        define(['jquery'], factory);
+    } else if (typeof exports === 'object') {
+        // CommonJS
+        factory(require('jquery'));
+    } else {
+        // Browser globals
+        factory(jQuery);
+    }
+}(function($) {
     $.fn.scrollIntoView = function(duration, easing, complete) {
         // The arguments are optional.
         // The first argment can be false for no animation or a duration.
         // The first argment could also be a map of options.
         // Refer to http://api.jquery.com/animate/.
-    	if(this.length == 0) {
-    		return this;
-    	}
-    	
+        if(this.length == 0) {
+            return this;
+        }
+        
         var opts = $.extend({},
         $.fn.scrollIntoView.defaults);
 
@@ -138,4 +154,4 @@
         return $([]);
     }
 
-})(jQuery);
+}));
