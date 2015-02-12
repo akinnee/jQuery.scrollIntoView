@@ -72,7 +72,7 @@
             // it wiggles?
             (pEl.scrollTop != ((pEl.scrollTop += 1) == null || pEl.scrollTop) && (pEl.scrollTop -= 1) != null) ||
             (pEl.scrollTop != ((pEl.scrollTop -= 1) == null || pEl.scrollTop) && (pEl.scrollTop += 1) != null)) {
-                if (elY <= pY) scrollTo(pEl, elY); // scroll up
+                if ((opts.alignWithTop && (elY + elH) > (pY + pH)) || elY <= pY) scrollTo(pEl, elY); // scroll up
                 else if ((elY + elH) > (pY + pH)) scrollTo(pEl, elY + elH - pH); // scroll down
                 else scrollTo(pEl, undefined) // no scroll
                 return;
@@ -86,9 +86,9 @@
             if (scrollTo === undefined) {
                 if ($.isFunction(opts.complete)) opts.complete.call(el);
             } else if (opts.smooth) {
-                $(el).stop().animate({ scrollTop: scrollTo }, opts);
+                $(el).stop().animate({ scrollTop: scrollTo + opts.offset }, opts);
             } else {
-                el.scrollTop = scrollTo;
+                el.scrollTop = scrollTo + opts.offset;
                 if ($.isFunction(opts.complete)) opts.complete.call(el);
             }
         }
@@ -103,7 +103,9 @@
         //       otherwise jQuery will default to use 'swing'
         complete: $.noop(),
         step: null,
-        specialEasing: {} // cannot be null in jQuery 1.8.3
+        specialEasing: {}, // cannot be null in jQuery 1.8.3
+        alignWithTop: false,
+        offset: 0
     };
 
     /*
